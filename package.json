@@ -1,0 +1,411 @@
+{
+	"name": "amqp-manager-vscode",
+	"publisher": "LeoGardini",
+	"displayName": "AMQP Manager for VSCode",
+	"description": "Manage AMQP brokers, queues, exchanges, and bindings",
+	"version": "0.0.1",
+	"packageManager": "bun@1.3.10",
+	"license": "MIT",
+	"icon": "resources/rabbit.png",
+	"galleryBanner": {
+		"color": "#ff6600",
+		"theme": "dark"
+	},
+	"homepage": "https://github.com/LeoGardini/amqp-manager-vscode#readme",
+	"bugs": {
+		"url": "https://github.com/LeoGardini/amqp-manager-vscode/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/LeoGardini/amqp-manager-vscode.git"
+	},
+	"engines": {
+		"vscode": "^1.90.0",
+		"bun": ">=1.3.10"
+	},
+	"categories": [
+		"Programming Languages",
+		"Visualization"
+	],
+	"extensionKind": [
+		"workspace"
+	],
+	"main": "./dist/extension.js",
+	"contributes": {
+		"viewsContainers": {
+			"activitybar": [
+				{
+					"id": "amqp-manager",
+					"title": "AMQP Manager",
+					"icon": "resources/rabbit.png"
+				}
+			]
+		},
+		"views": {
+			"amqp-manager": [
+				{
+					"id": "amqp-manager.connections",
+					"name": "Connections",
+					"icon": "resources/icons/connection.svg"
+				},
+				{
+					"id": "amqp-manager.queues",
+					"name": "Queues",
+					"icon": "resources/icons/queue.svg"
+				},
+				{
+					"id": "amqp-manager.exchanges",
+					"name": "Exchanges",
+					"icon": "resources/icons/exchange.svg"
+				},
+				{
+					"id": "amqp-manager.bindings",
+					"name": "Bindings",
+					"icon": "resources/icons/binding.svg"
+				}
+			]
+		},
+		"commands": [
+			{
+				"command": "amqp-manager.openPanel",
+				"title": "AMQP Manager: Focus Explorer",
+				"icon": "resources/icons/panel.svg"
+			},
+			{
+				"command": "amqp-manager.addConnection",
+				"title": "AMQP Manager: Add Connection",
+				"icon": "$(add)"
+			},
+			{
+				"command": "amqp-manager.editConnection",
+				"title": "AMQP Manager: Edit Connection",
+				"icon": "$(gear)"
+			},
+			{
+				"command": "amqp-manager.removeConnection",
+				"title": "AMQP Manager: Remove Connection",
+				"icon": "$(trash)"
+			},
+			{
+				"command": "amqp-manager.refreshActiveConnection",
+				"title": "AMQP Manager: Refresh Active Connection",
+				"icon": "$(refresh)"
+			},
+			{
+				"command": "amqp-manager.setActiveConnection",
+				"title": "AMQP Manager: Set Active Connection",
+				"icon": "$(check)"
+			},
+			{
+				"command": "amqp-manager.testActiveConnection",
+				"title": "AMQP Manager: Test Active Connection",
+				"icon": "$(pulse)"
+			},
+			{
+				"command": "amqp-manager.createQueue",
+				"title": "AMQP Manager: Create Queue",
+				"icon": "$(add)"
+			},
+			{
+				"command": "amqp-manager.inspectQueue",
+				"title": "AMQP Manager: Inspect Queue",
+				"icon": "$(search)"
+			},
+			{
+				"command": "amqp-manager.deleteQueue",
+				"title": "AMQP Manager: Delete Queue",
+				"icon": "$(trash)"
+			},
+			{
+				"command": "amqp-manager.purgeQueue",
+				"title": "AMQP Manager: Purge Queue",
+				"icon": "$(clear-all)"
+			},
+			{
+				"command": "amqp-manager.listQueueMessages",
+				"title": "AMQP Manager: List Queue Messages",
+				"icon": "$(list-unordered)"
+			},
+			{
+				"command": "amqp-manager.createExchange",
+				"title": "AMQP Manager: Create Exchange",
+				"icon": "$(add)"
+			},
+			{
+				"command": "amqp-manager.inspectExchange",
+				"title": "AMQP Manager: Inspect Exchange",
+				"icon": "$(search)"
+			},
+			{
+				"command": "amqp-manager.deleteExchange",
+				"title": "AMQP Manager: Delete Exchange",
+				"icon": "$(trash)"
+			},
+			{
+				"command": "amqp-manager.createBinding",
+				"title": "AMQP Manager: Create Binding",
+				"icon": "$(add)"
+			},
+			{
+				"command": "amqp-manager.inspectBinding",
+				"title": "AMQP Manager: Inspect Binding",
+				"icon": "$(search)"
+			},
+			{
+				"command": "amqp-manager.deleteBinding",
+				"title": "AMQP Manager: Delete Binding",
+				"icon": "$(trash)"
+			}
+		],
+		"menus": {
+			"view/title": [
+				{
+					"command": "amqp-manager.addConnection",
+					"when": "view == amqp-manager.connections",
+					"group": "navigation@1"
+				},
+				{
+					"command": "amqp-manager.refreshActiveConnection",
+					"when": "view == amqp-manager.connections || view == amqp-manager.queues || view == amqp-manager.exchanges || view == amqp-manager.bindings",
+					"group": "navigation@2"
+				},
+				{
+					"command": "amqp-manager.testActiveConnection",
+					"when": "view == amqp-manager.connections && amqp-manager.hasActiveConnection",
+					"group": "navigation@3"
+				},
+				{
+					"command": "amqp-manager.createQueue",
+					"when": "view == amqp-manager.queues && amqp-manager.hasActiveConnection",
+					"group": "navigation@1"
+				},
+				{
+					"command": "amqp-manager.createExchange",
+					"when": "view == amqp-manager.exchanges && amqp-manager.hasActiveConnection",
+					"group": "navigation@1"
+				},
+				{
+					"command": "amqp-manager.createBinding",
+					"when": "view == amqp-manager.bindings && amqp-manager.hasActiveConnection",
+					"group": "navigation@1"
+				}
+			],
+			"view/item/context": [
+				{
+					"command": "amqp-manager.setActiveConnection",
+					"when": "view == amqp-manager.connections && viewItem == amqp-manager.connection",
+					"group": "inline@1"
+				},
+				{
+					"command": "amqp-manager.editConnection",
+					"when": "view == amqp-manager.connections && (viewItem == amqp-manager.connection || viewItem == amqp-manager.connectionActive)",
+					"group": "inline@2"
+				},
+				{
+					"command": "amqp-manager.removeConnection",
+					"when": "view == amqp-manager.connections && (viewItem == amqp-manager.connection || viewItem == amqp-manager.connectionActive)",
+					"group": "inline@3"
+				},
+				{
+					"command": "amqp-manager.publishQueue",
+					"when": "view == amqp-manager.queues && viewItem == amqp-manager.queue",
+					"group": "inline@1"
+				},
+				{
+					"command": "amqp-manager.inspectQueue",
+					"when": "view == amqp-manager.queues && viewItem == amqp-manager.queue",
+					"group": "inline@2"
+				},
+				{
+					"command": "amqp-manager.listQueueMessages",
+					"when": "view == amqp-manager.queues && viewItem == amqp-manager.queue",
+					"group": "inline@3"
+				},
+				{
+					"command": "amqp-manager.editQueue",
+					"when": "view == amqp-manager.queues && viewItem == amqp-manager.queue",
+					"group": "inline@4"
+				},
+				{
+					"command": "amqp-manager.purgeQueue",
+					"when": "view == amqp-manager.queues && viewItem == amqp-manager.queue",
+					"group": "inline@5"
+				},
+				{
+					"command": "amqp-manager.deleteQueue",
+					"when": "view == amqp-manager.queues && viewItem == amqp-manager.queue",
+					"group": "inline@6"
+				},
+				{
+					"command": "amqp-manager.publishExchange",
+					"when": "view == amqp-manager.exchanges && viewItem == amqp-manager.exchange",
+					"group": "inline@1"
+				},
+				{
+					"command": "amqp-manager.inspectExchange",
+					"when": "view == amqp-manager.exchanges && viewItem == amqp-manager.exchange",
+					"group": "inline@2"
+				},
+				{
+					"command": "amqp-manager.editExchange",
+					"when": "view == amqp-manager.exchanges && viewItem == amqp-manager.exchange",
+					"group": "inline@3"
+				},
+				{
+					"command": "amqp-manager.deleteExchange",
+					"when": "view == amqp-manager.exchanges && viewItem == amqp-manager.exchange",
+					"group": "inline@4"
+				},
+				{
+					"command": "amqp-manager.inspectBinding",
+					"when": "view == amqp-manager.bindings && viewItem == amqp-manager.binding",
+					"group": "inline@1"
+				},
+				{
+					"command": "amqp-manager.deleteBinding",
+					"when": "view == amqp-manager.bindings && viewItem == amqp-manager.binding",
+					"group": "inline@2"
+				}
+			]
+		},
+		"configuration": {
+			"title": "AMQP Manager",
+			"properties": {
+				"amqp-manager.connections": {
+					"type": "array",
+					"scope": "resource",
+					"default": [],
+					"description": "AMQP Manager connections saved in the workspace settings file.",
+					"items": {
+						"type": "object",
+						"required": [
+							"id",
+							"name",
+							"managementUrl",
+							"amqpUrl",
+							"vhost",
+							"username",
+							"password",
+							"tls",
+							"timeoutMs",
+							"rejectUnauthorized"
+						],
+						"properties": {
+							"id": {
+								"type": "string",
+								"description": "Stable connection identifier."
+							},
+							"name": {
+								"type": "string",
+								"description": "Display name shown in the explorer."
+							},
+							"managementUrl": {
+								"type": "string",
+								"description": "Compatible HTTP management API base URL."
+							},
+							"amqpUrl": {
+								"type": "string",
+								"description": "AMQP broker endpoint URL."
+							},
+							"vhost": {
+								"type": "string",
+								"description": "Broker virtual host."
+							},
+							"username": {
+								"type": "string",
+								"description": "Connection username."
+							},
+							"password": {
+								"type": "string",
+								"description": "Connection password stored in plain text in the workspace settings file."
+							},
+							"tls": {
+								"type": "boolean",
+								"description": "Whether TLS should be used for the connection."
+							},
+							"timeoutMs": {
+								"type": "number",
+								"description": "Request timeout in milliseconds."
+							},
+							"rejectUnauthorized": {
+								"type": "boolean",
+								"description": "Whether invalid TLS certificates should be rejected."
+							}
+						}
+					}
+				},
+				"amqp-manager.defaultConnection": {
+					"type": "string",
+					"scope": "resource",
+					"default": "",
+					"description": "Connection id or name to use when no active broker connection is selected."
+				},
+				"amqp-manager.autoRefreshSeconds": {
+					"type": "number",
+					"scope": "resource",
+					"default": 0,
+					"minimum": 0,
+					"description": "Automatically refresh queues, exchanges and bindings every N seconds. Use 0 to disable."
+				},
+				"amqp-manager.requestTimeoutMs": {
+					"type": "number",
+					"scope": "resource",
+					"default": 1e4,
+					"minimum": 1000,
+					"description": "Timeout for management API and AMQP connectivity requests."
+				},
+				"amqp-manager.confirmDestructiveActions": {
+					"type": "boolean",
+					"scope": "resource",
+					"default": true,
+					"description": "Require confirmation before delete and purge operations."
+				}
+			}
+		}
+	},
+	"keywords": [
+		"rabbitmq",
+		"amqp",
+		"queue",
+		"exchange",
+		"broker",
+		"vscode"
+	],
+	"scripts": {
+		"vscode:prepublish": "bun run package",
+		"build": "bun run check-types && bun run lint && bun run bundle",
+		"bundle": "bun run scripts/build.ts",
+		"bundle:watch": "bun --watch run scripts/build.ts",
+		"bundle:production": "bun run scripts/build.ts --production",
+		"compile": "bun run build",
+		"watch": "bun run --parallel check-types:watch bundle:watch",
+		"package": "bun run check-types && bun run lint && bun run bundle:production",
+		"check-types": "tsgo --noEmit --project tsconfig.json",
+		"check-types:watch": "tsgo --noEmit --watch --project tsconfig.json",
+		"lint": "bunx @biomejs/biome check src test",
+		"test:unit": "bun test ./test/unit",
+		"test:integration": "bun run bundle && bun run compile-tests && node ./out/src/test/runTest.js",
+		"compile-tests": "tsgo -p . --outDir out",
+		"test": "bun run test:unit",
+		"package:vsix": "bunx @vscode/vsce package --no-yarn --no-dependencies",
+		"package:vsix:ci": "mkdir -p artifacts && bunx @vscode/vsce package --no-yarn --no-dependencies --out artifacts/amqp-manager-vscode.vsix",
+		"release:check": "bun run scripts/validate-release.ts",
+		"release:notes": "bun run scripts/print-release-notes.ts"
+	},
+	"dependencies": {
+		"amqplib": "^0.10.9",
+		"undici": "^7.16.0"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^2.4.6",
+		"@types/amqplib": "^0.10.8",
+		"@types/bun": "^1.3.10",
+		"@types/mocha": "^10.0.10",
+		"@types/node": "^25.4.0",
+		"@types/vscode": "^1.90.0",
+		"@typescript/native-preview": "^7.0.0-dev.20260309.1",
+		"@vscode/test-cli": "^0.0.12",
+		"@vscode/test-electron": "^2.5.2",
+		"@vscode/vsce": "^3.7.1"
+	}
+}

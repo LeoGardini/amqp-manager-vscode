@@ -1,0 +1,16 @@
+{
+	"amqp-manager.connections": [
+		{
+			"id": "eb46a67f-1341-49cc-a4f9-3915ee5a5f50",
+			"name": "Local",
+			"managementUrl": "http://localhost:15673",
+			"amqpUrl": "amqp://localhost:5673",
+			"vhost": "/",
+			"username": "guest",
+			"tls": false,
+			"timeoutMs": 10000,
+			"rejectUnauthorized": true,
+			"password": "guest"
+		}
+	]
+}
